@@ -1,5 +1,20 @@
 {
+    "name": "acmedev/acmedemo",
+    "description": "Example site for Acquia Cloud CD.",
+    "type": "project",
+    "license": "proprietary",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "repositories": {
+        "blt": {
+            "type": "path",
+            "url": "../blt",
+            "options": {
+                "symlink": true
+            }
+        }
+    },
     "require": {
-        "league/csv": "^8.2"
+        "acquia/blt": "8.x-dev"
     }
 }
