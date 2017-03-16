@@ -1,0 +1,10 @@
+name: acmetheme
+type: theme
+description: My Awesome theme
+package: Other
+core: 8.x
+libraries:
+  - acmetheme/global-styling
+
+base theme: bartik
+
