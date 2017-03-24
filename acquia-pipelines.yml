@@ -1,10 +1,28 @@
 version: 1.0.0
 services:
   - mysql
+variables:
+  global:
+    PIPELINES_DEPLOY_URL: 'https://github.com/acquia/pipelines-examples/releases/download/deploy-latest/pipelines-deploy'
+    PIPELINES_DEPLOY_TOOL: $HOME/pipelines-deploy
+    N3_KEY: c0aa18df-b6cc-49ba-a9d8-5980f91eae4b
+    N3_SECRET:
+      secure: 2accffuk7yPk8WKvoMDdJ04iKzA630Qa5bdg9ZujUxJQB1FaxO6OU5x2IOxfe6Q5mSACTkVB2Btilk7dyp7J14JyylOXNLs1XBDQI2PQgQyTaSxg4MosiqYwW6w1kE9/PCIdJ65OHoc709XFtFsWxnSk2nv0xrts7j2TMjN5Ej3hugRSN4tb8nfmWTvwC6AFD7NZ99UUCe8EDBMvLVr31wuTdTxbxCFdvJXPevsez705Wtnxa9B+8uD0w98kFT+QqI1vy7k80LnxX/fMOnf2XpBOhgsz0xhYjwkdede1bHkfBuD3pD+RkdmLharj/6Iqe1kReABY+hh6cIhld2DVz3AzsZPPiVnYFrtaif0mEq3Oo+0Xsgdu7VbUNd6hTb/zXJheOYWIjXyqI5SnEaKJXJVqVFO2JvXwwyYIAfD3edkIxWzqsGrHAoRqv7zmsgwiXh8weDgmFRxs30/IBsbfY6Q2OScSZkpRBNOnGYBCOiKowAUSQNQnb4VVkhAL9Fx75Wd177QWUpmyaCruhPUov72rfrVMpboVGHMDXnrHpSCsIyVgFqDXEesEWxAQ/BuzalZE3MzfGjXyuJDvvjHZoSycN70K5LQ7NhIa8zYZfVT5L88jkYefldlSoGAwORRzwJTdij58LJmD+KIbkROpi/xMf17EYslT5BiDoeCDHk8Z/0=iYYCkbxcAqv0HPEBNXP9UJ1y2UxXsHNQHuMAE03JGWiEma1iGff+owP3IUIh5yUfwC7aX3i4hWEnlj/YZuIMDqNOoMA5IHGQRenjFWNDFd3nbk/oFQ17VnmTPH5tp9xhxQhrJOnBRGN02n0cRzA1TDbadjlXu6nbn3y/eFisEzA=
 events:
   build:
     steps:
-        - setup-project:
-            type: script
-            script:
-              - composer install
+      - setup-project:
+          type: script
+          script:
+            - 'composer install'
+      - deploy:
+          script:
+            - curl -s -L -o $PIPELINES_DEPLOY_TOOL "$PIPELINES_DEPLOY_URL" && chmod 755 $PIPELINES_DEPLOY_TOOL
+            - $PIPELINES_DEPLOY_TOOL
+
+  merge:
+    steps:
+      - deploy:
+          script:
+            - curl -o $PIPELINES_DEPLOY_TOOL "$PIPELINES_DEPLOY_URL" && chmod 755 $PIPELINES_DEPLOY_TOOL
+            - $PIPELINES_DEPLOY_TOOL
